@@ -27,3 +27,25 @@ def get_network_interface():
     finally:
         s.close()
     return IP
+
+
+def scan_network():
+    nm = nmap.PortScanner()
+    network = get_network_interface()
+    network_range = '.'.join(network.split('.')[:-1]) + '.0/24'
+    
+    try:
+        nm.scan(hosts=network_range, arguments='-sn')
+        devices = []
+        
+        for host in nm.all_hosts():
+            try:
+                hostname = nm[host].hostname()
+            except:
+                hostname = "Desconocido"
+            devices.append({'ip': host, 'hostname': hostname})
+        
+        return devices
+    except Exception as e:
+        print(f"Error en el escaneo: {e}")
+        return []
