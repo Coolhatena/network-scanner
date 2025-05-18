@@ -15,6 +15,7 @@ class Device:
         self.last_seen = datetime.now()
         self.is_active = True
 
+
 def get_network_interface():
     import socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
