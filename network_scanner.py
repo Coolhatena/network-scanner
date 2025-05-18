@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 import nmap
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 
 # Inicializar colorama
 init()
@@ -29,10 +29,8 @@ def get_network_interface():
     return IP
 
 
-def scan_network():
+def scan_network(network_range):
     nm = nmap.PortScanner()
-    network = get_network_interface()
-    network_range = '.'.join(network.split('.')[:-1]) + '.0/24'
     
     try:
         nm.scan(hosts=network_range, arguments='-sn')
@@ -60,9 +58,9 @@ def main():
     
     while True:
         try:
-            current_devices = scan_network()
             network = get_network_interface()
             network_range = '.'.join(network.split('.')[:-1]) + '.0/24'
+            current_devices = scan_network(network_range)
             
             current_ips = [device['ip'] for device in current_devices]
             
@@ -106,7 +104,6 @@ def main():
                 status_text = "ACTIVO" if device.is_active else "INACTIVO"
                 print(f"{status_color}{device.ip:<16} {device.hostname:<30} {status_text:<10} {device.last_seen.strftime('%H:%M:%S')}{Style.RESET_ALL}")
             
-            time.sleep(3)
             
         except KeyboardInterrupt:
             print(f"\n{Fore.RED}Escaneo terminado por el usuario{Style.RESET_ALL}")
