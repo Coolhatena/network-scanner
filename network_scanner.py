@@ -49,3 +49,8 @@ def scan_network():
     except Exception as e:
         print(f"Error en el escaneo: {e}")
         return []
+    
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
